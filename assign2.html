@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VaultOfCodes Internships</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- General Styles & Resets --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f2f5; /* A light, clean background */
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        /* --- Main Container --- */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            text-align: center;
+        }
+
+        /* --- Header Section --- */
+        .main-header {
+            margin-bottom: 3rem;
+        }
+
+        .main-header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #1e2a78; /* A professional deep blue */
+            margin-bottom: 0.5rem;
+        }
+
+        .main-header p {
+            font-size: 1.1rem;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto; /* Centers the paragraph */
+        }
+
+        /* --- Internship Grid Layout --- */
+        .internship-grid {
+            display: grid;
+            /* Creates a responsive grid that adjusts columns automatically */
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        /* --- Internship Card Styling --- */
+        .internship-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            padding: 2rem;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .internship-card:hover {
+            transform: translateY(-10px); /* Lifts the card on hover */
+            box-shadow: 0 10px 25px rgba(30, 42, 120, 0.15); /* Adds a deeper shadow on hover */
+        }
+
+        .internship-card h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #1e2a78;
+            margin-bottom: 1.5rem;
+            min-height: 50px; /* Aligns content for titles of different lengths */
+        }
+
+        .internship-card ul {
+            list-style: none;
+            margin-bottom: 2rem;
+            flex-grow: 1; /* Pushes the button to the bottom of the card */
+        }
+
+        .internship-card ul li {
+            font-size: 0.95rem;
+            color: #555;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .internship-card ul li strong {
+            color: #333;
+            min-width: 90px; /* Aligns the detail values */
+            display: inline-block;
+        }
+
+        /* --- Button Styling --- */
+        .btn {
+            display: inline-block;
+            background: linear-gradient(45deg, #4f46e5, #7c3aed);
+            color: #ffffff;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);
+        }
+
+        .btn:hover {
+            background: linear-gradient(45deg, #4338ca, #6d28d9);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(79, 70, 229, 0.4);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header class="main-header">
+            <h1>Internships</h1>
+            <p>Explore our exciting internship opportunities and kickstart your career in tech! 🚀</p>
+        </header>
+
+        <div class="internship-grid">
+            <div class="internship-card">
+                <h2>Web Development Internship Program</h2>
+                <ul>
+                    <li><strong>Duration:</strong> 1 month / 2 months</li>
+                    <li><strong>Location:</strong> Virtual</li>
+                    <li><strong>Stipend:</strong> Not Disclosed</li>
+                    <li><strong>Start Date:</strong> 05/11/2023</li>
+                </ul>
+                <a href="#" class="btn">View Details</a>
+            </div>
+
+            <div class="internship-card">
+                <h2>App Development Internship Program</h2>
+                <ul>
+                    <li><strong>Duration:</strong> 1 month / 2 months</li>
+                    <li><strong>Location:</strong> Virtual</li>
+                    <li><strong>Stipend:</strong> Not Disclosed</li>
+                    <li><strong>Start Date:</strong> 05/11/2023</li>
+                </ul>
+                 <a href="#" class="btn">View Details</a>
+            </div>
+
+            <div class="internship-card">
+                <h2>Python Programming Internship Program</h2>
+                <ul>
+                    <li><strong>Duration:</strong> 1 month / 2 months</li>
+                    <li><strong>Location:</strong> Virtual</li>
+                    <li><strong>Stipend:</strong> Not Disclosed</li>
+                    <li><strong>Start Date:</strong> 05/11/2023</li>
+                </ul>
+                 <a href="#" class="btn">View Details</a>
+            </div>
+
+            <div class="internship-card">
+                <h2>Java Programming Internship Program</h2>
+                <ul>
+                    <li><strong>Duration:</strong> 1 month / 2 months</li>
+                    <li><strong>Location:</strong> Virtual</li>
+                    <li><strong>Stipend:</strong> Not Disclosed</li>
+                    <li><strong>Start Date:</strong> 05/11/2023</li>
+                </ul>
+                 <a href="#" class="btn">View Details</a>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
