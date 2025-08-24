@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resume Builder</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0; padding: 0;
+    background: #f4f6f8;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  h1 { margin: 20px 0; }
+  .container {
+    display: flex; flex-wrap: wrap;
+    width: 95%; max-width: 1200px;
+    gap: 20px;
+  }
+  form {
+    flex: 1 1 350px;
+    background: #fff; padding: 20px; border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+  form h2 { margin-bottom: 10px; }
+  label { display: block; margin: 8px 0 4px; }
+  input, textarea {
+    width: 100%; padding: 8px;
+    border: 1px solid #ccc; border-radius: 4px;
+    transition: 0.3s;
+  }
+  input:focus, textarea:focus {
+    border-color: #007bff; outline: none; box-shadow: 0 0 4px #007bff55;
+  }
+  button {
+    margin-top: 10px; padding: 8px 16px;
+    border: none; border-radius: 6px; cursor: pointer;
+    transition: 0.3s;
+  }
+  .add-btn { background: #28a745; color: #fff; }
+  .reset-btn { background: #dc3545; color: #fff; }
+  .save-btn { background: #007bff; color: #fff; }
+  button:hover { opacity: 0.9; }
+  /* Resume Preview */
+  .preview {
+    flex: 1 1 500px;
+    background: #fff; padding: 20px; border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+  .preview h2 { text-align: center; }
+  .section { margin-bottom: 15px; }
+  .fade-in { animation: fade 0.6s ease; }
+  @keyframes fade { from {opacity: 0; transform: translateY(10px);} to {opacity:1; transform:translateY(0);} }
+  /* Responsive */
+  @media(max-width:768px){ .container{flex-direction:column; align-items:center;} }
+</style>
+</head>
+<body>
+<h1>Interactive Resume Builder</h1>
+<div class="container">
+  <!-- Form -->
+  <form id="resumeForm">
+    <h2>Enter Details</h2>
+    <label>Name:</label><input type="text" id="name">
+    <label>Email:</label><input type="email" id="email">
+    <label>Phone:</label><input type="tel" id="phone">
+    <label>Profile Summary:</label><textarea id="summary"></textarea>
+    
+    <div id="education-section">
+      <h3>Education</h3>
+      <div class="edu-entry">
+        <input type="text" placeholder="Degree, School, Year" class="edu">
+      </div>
+    </div>
+    <button type="button" class="add-btn" onclick="addField('education')">+ Add Education</button>
+    
+    <div id="experience-section">
+      <h3>Experience</h3>
+      <div class="exp-entry">
+        <input type="text" placeholder="Role, Company, Duration" class="exp">
+      </div>
+    </div>
+    <button type="button" class="add-btn" onclick="addField('experience')">+ Add Experience</button>
+    
+    <label>Skills (comma separated):</label><input type="text" id="skills">
+    <br>
+    <button type="button" class="reset-btn" onclick="resetForm()">Clear Data</button>
+    <button type="button" class="save-btn" onclick="savePDF()">Save as PDF</button>
+  </form>
+  
+  <!-- Preview -->
+  <div class="preview" id="resumePreview">
+    <h2 id="p-name">Your Name</h2>
+    <div id="p-contact"></div>
+    <div class="section"><h3>Profile</h3><p id="p-summary"></p></div>
+    <div class="section"><h3>Education</h3><ul id="p-edu"></ul></div>
+    <div class="section"><h3>Experience</h3><ul id="p-exp"></ul></div>
+    <div class="section"><h3>Skills</h3><p id="p-skills"></p></div>
+  </div>
+</div>
+
+<script>
+const form = document.getElementById("resumeForm");
+
+function updatePreview(){
+  document.getElementById("p-name").textContent = document.getElementById("name").value || "Your Name";
+  document.getElementById("p-contact").textContent = (document.getElementById("email").value||"") + " | " + (document.getElementById("phone").value||"");
+  document.getElementById("p-summary").textContent = document.getElementById("summary").value;
+  
+  const eduList=document.getElementById("p-edu"); eduList.innerHTML="";
+  document.querySelectorAll(".edu").forEach(e=>{if(e.value){let li=document.createElement("li");li.textContent=e.value;li.classList.add("fade-in");eduList.appendChild(li);}});
+  
+  const expList=document.getElementById("p-exp"); expList.innerHTML="";
+  document.querySelectorAll(".exp").forEach(e=>{if(e.value){let li=document.createElement("li");li.textContent=e.value;li.classList.add("fade-in");expList.appendChild(li);}});
+  
+  document.getElementById("p-skills").textContent=document.getElementById("skills").value;
+  
+  saveData(); // auto-save
+}
+
+form.addEventListener("input", updatePreview);
+
+function addField(type){
+  const div=document.createElement("div");
+  div.innerHTML=`<input type="text" class="${type==='education'?'edu':'exp'}" placeholder="${type==='education'?'Degree, School, Year':'Role, Company, Duration'}">`;
+  document.getElementById(type+"-section").appendChild(div);
+  div.querySelector("input").addEventListener("input", updatePreview);
+  saveData();
+}
+
+function resetForm(){
+  form.reset();
+  document.querySelectorAll(".edu, .exp").forEach((el,i)=>{if(i>0)el.parentNode.remove();});
+  localStorage.removeItem("resumeData");
+  updatePreview();
+}
+
+/* ---- LocalStorage Save/Load ---- */
+function saveData(){
+  const data = {
+    name: document.getElementById("name").value,
+    email: document.getElementById("email").value,
+    phone: document.getElementById("phone").value,
+    summary: document.getElementById("summary").value,
+    skills: document.getElementById("skills").value,
+    education: Array.from(document.querySelectorAll(".edu")).map(e=>e.value),
+    experience: Array.from(document.querySelectorAll(".exp")).map(e=>e.value)
+  };
+  localStorage.setItem("resumeData", JSON.stringify(data));
+}
+
+function loadData(){
+  const saved = localStorage.getItem("resumeData");
+  if(!saved) return;
+  const data = JSON.parse(saved);
+  document.getElementById("name").value = data.name || "";
+  document.getElementById("email").value = data.email || "";
+  document.getElementById("phone").value = data.phone || "";
+  document.getElementById("summary").value = data.summary || "";
+  document.getElementById("skills").value = data.skills || "";
+  
+  // Rebuild education
+  document.querySelectorAll(".edu-entry").forEach((el,i)=>{if(i>0)el.remove();});
+  data.education.forEach((val,i)=>{
+    if(i===0){document.querySelector(".edu").value=val;}
+    else{addField("education");document.querySelectorAll(".edu")[i].value=val;}
+  });
+  
+  // Rebuild experience
+  document.querySelectorAll(".exp-entry").forEach((el,i)=>{if(i>0)el.remove();});
+  data.experience.forEach((val,i)=>{
+    if(i===0){document.querySelector(".exp").value=val;}
+    else{addField("experience");document.querySelectorAll(".exp")[i].value=val;}
+  });
+  
+  updatePreview();
+}
+
+// PDF Save
+function savePDF(){
+  const element = document.getElementById("resumePreview");
+  html2pdf().set({
+    margin: 0.5,
+    filename: (document.getElementById("name").value || "resume") + ".pdf",
+    image: { type: "jpeg", quality: 0.98 },
+    html2canvas: { scale: 2 },
+    jsPDF: { unit: "in", format: "a4", orientation: "portrait" }
+  }).from(element).save();
+  alert("📄 Resume is being saved as PDF!");
+}
+
+// Load on start
+loadData();
+</script>
+</body>
+</html>
